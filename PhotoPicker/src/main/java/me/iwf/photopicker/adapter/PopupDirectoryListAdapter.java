@@ -7,6 +7,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.hss01248.image.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 import me.iwf.photopicker.R;
@@ -19,11 +22,11 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
 
 
   private List<PhotoDirectory> directories = new ArrayList<>();
-  private RequestManager glide;
+  //private RequestManager glide;
 
-  public PopupDirectoryListAdapter(RequestManager glide, List<PhotoDirectory> directories) {
+  public PopupDirectoryListAdapter( List<PhotoDirectory> directories) {
     this.directories = directories;
-    this.glide = glide;
+    //this.glide = glide;
   }
 
 
@@ -60,20 +63,19 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
 
   private class ViewHolder {
 
-    public ImageView ivCover;
+    public SimpleDraweeView ivCover;
     public TextView tvName;
     public TextView tvCount;
 
     public ViewHolder(View rootView) {
-      ivCover = (ImageView) rootView.findViewById(R.id.iv_dir_cover);
+      ivCover = (SimpleDraweeView) rootView.findViewById(R.id.iv_dir_cover);
       tvName  = (TextView)  rootView.findViewById(R.id.tv_dir_name);
       tvCount = (TextView)  rootView.findViewById(R.id.tv_dir_count);
     }
 
     public void bindData(PhotoDirectory directory) {
-      glide.load(directory.getCoverPath())
-          .dontAnimate()
-          .thumbnail(0.1f)
+      ImageLoader.with(null).content(directory.getCoverPath())
+          .widthHeight(100,100)
           .into(ivCover);
       tvName.setText(directory.getName());
       tvCount.setText(tvCount.getContext().getString(R.string.__picker_image_count, directory.getPhotos().size()));

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import com.bumptech.glide.Glide;
+import com.hss01248.image.ImageLoader;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
@@ -109,6 +111,10 @@ public class ImagePagerFragment extends Fragment {
         paths = new ArrayList<>(Arrays.asList(pathArr));
       }
 
+      for(String path: paths){
+        Log.e("path",path);
+      }
+
       hasAnim         = bundle.getBoolean(ARG_HAS_ANIM);
       currentItem     = bundle.getInt(ARG_CURRENT_ITEM);
       thumbnailTop    = bundle.getInt(ARG_THUMBNAIL_TOP);
@@ -117,7 +123,7 @@ public class ImagePagerFragment extends Fragment {
       thumbnailHeight = bundle.getInt(ARG_THUMBNAIL_HEIGHT);
     }
 
-    mPagerAdapter = new PhotoPagerAdapter(Glide.with(this), paths);
+    //mPagerAdapter = new PhotoPagerAdapter(Glide.with(this), paths);
   }
 
 
@@ -127,13 +133,14 @@ public class ImagePagerFragment extends Fragment {
     View rootView = inflater.inflate(R.layout.__picker_picker_fragment_image_pager, container, false);
 
     mViewPager = (ViewPager) rootView.findViewById(R.id.vp_photos);
-    mViewPager.setAdapter(mPagerAdapter);
+    //mViewPager.setAdapter(mPagerAdapter);
+    ImageLoader.loadBigImages(mViewPager,paths);
     mViewPager.setCurrentItem(currentItem);
-    mViewPager.setOffscreenPageLimit(5);
+    mViewPager.setOffscreenPageLimit(1);
 
     // Only run the animation if we're coming from the parent activity, not if
     // we're recreated automatically by the window manager (e.g., device rotation)
-    if (savedInstanceState == null && hasAnim) {
+    /*if (savedInstanceState == null && hasAnim) {
       ViewTreeObserver observer = mViewPager.getViewTreeObserver();
       observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
         @Override
@@ -153,7 +160,7 @@ public class ImagePagerFragment extends Fragment {
           return true;
         }
       });
-    }
+    }*/
 
 
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -164,6 +171,7 @@ public class ImagePagerFragment extends Fragment {
 
       @Override public void onPageSelected(int position) {
         hasAnim = currentItem == position;
+        Log.e("onPageSelected:",paths.get(position));
       }
 
       @Override public void onPageScrollStateChanged(int state) {
