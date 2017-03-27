@@ -10,18 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.bumptech.glide.Glide;
+
 import com.hss01248.image.ImageLoader;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.adapter.PhotoPagerAdapter;
 
@@ -129,7 +130,7 @@ public class ImagePagerFragment extends Fragment {
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
+    Log.e("fragment","onCreateView----pager");
     View rootView = inflater.inflate(R.layout.__picker_picker_fragment_image_pager, container, false);
 
     mViewPager = (ViewPager) rootView.findViewById(R.id.vp_photos);
@@ -303,8 +304,25 @@ public class ImagePagerFragment extends Fragment {
     return mViewPager.getCurrentItem();
   }
 
+
+
+  @Override
+  public void onDestroyView() {
+    ImageLoader.getActualLoader().clearMomoryCache(getView());
+    super.onDestroyView();
+    Log.e("fragment","onDestroyView----pager");
+
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    Log.e("fragment","onStop----pager");
+  }
+
   @Override public void onDestroy() {
     super.onDestroy();
+    Log.e("fragment","onDestroy----pager");
 
     paths.clear();
     paths = null;
@@ -312,5 +330,9 @@ public class ImagePagerFragment extends Fragment {
     if (mViewPager != null) {
       mViewPager.setAdapter(null);
     }
+  }
+
+  public void update(List<String> photos, int index, int[] screenLocation, int height, int width) {
+
   }
 }

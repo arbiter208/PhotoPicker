@@ -11,6 +11,7 @@ import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +22,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.hss01248.image.ImageLoader;
 import com.hss01248.image.config.GlobalConfig;
 
@@ -135,7 +134,7 @@ public class PhotoPickerFragment extends Fragment {
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
+    Log.e("fragment","onCreateView----picker");
     final View rootView = inflater.inflate(R.layout.__picker_fragment_photo_picker, container, false);
     titlebar = (Titlebar) rootView.findViewById(R.id.titlebar);
 
@@ -189,11 +188,18 @@ public class PhotoPickerFragment extends Fragment {
 
         int[] screenLocation = new int[2];
         v.getLocationOnScreen(screenLocation);
-        ImagePagerFragment imagePagerFragment =
+
+        //todo 怎么将相关的数据传递出去?
+
+        /*ImagePagerFragment imagePagerFragment =
             ImagePagerFragment.newInstance(photos, index, screenLocation, v.getWidth(),
+                v.getHeight());*/
+
+
+
+        ((PhotoPickerActivity) getActivity()).showPagerFragment(photos, index, screenLocation, v.getWidth(),
                 v.getHeight());
 
-        ((PhotoPickerActivity) getActivity()).addImagePagerFragment(imagePagerFragment);
       }
     });
 
@@ -308,9 +314,25 @@ public class PhotoPickerFragment extends Fragment {
     }
   }
 
+    @Override
+    public void onDestroyView() {
+        ImageLoader.getActualLoader().clearMomoryCache(getView());
+        super.onDestroyView();
+      Log.e("fragment","onDestroyView----picker");
+
+    }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    Log.e("fragment","onStop----picker");
+  }
+
   @Override public void onDestroy() {
     super.onDestroy();
-
+    Log.e("fragment","onDestroy----picker");
+   // ImageLoader.getActualLoader().clearMomoryCache(getView());
+    //Glide.get(this).clearMemory();
     if (directories == null) {
       return;
     }

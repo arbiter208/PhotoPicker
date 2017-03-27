@@ -28,7 +28,7 @@ dependencies {
   compile 'com.nineoldandroids:library:2.4.0'
   compile 'com.github.bumptech.glide:glide:3.7.0'
   compile 'jp.wasabeef:glide-transformations:2.0.1'
-  compile 'com.github.hss01248:ImageLoader:0.0.4'
-
+  //compile 'com.github.hss01248:ImageLoader:0.0.6'
+  compile project(':image')
 }
 

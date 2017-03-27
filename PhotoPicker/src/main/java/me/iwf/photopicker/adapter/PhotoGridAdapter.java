@@ -8,14 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.hss01248.image.ImageLoader;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.entity.Photo;
 import me.iwf.photopicker.entity.PhotoDirectory;
@@ -168,13 +167,13 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
 
   public static class PhotoViewHolder extends RecyclerView.ViewHolder {
-    private SimpleDraweeView ivPhoto;
+    private ImageView ivPhoto;
     private View vSelected;
     private View cover;
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
-      ivPhoto   = (SimpleDraweeView) itemView.findViewById(R.id.iv_photo);
+      ivPhoto   = (ImageView) itemView.findViewById(R.id.iv_photo);
       vSelected = itemView.findViewById(R.id.v_selected);
       cover = itemView.findViewById(R.id.cover);
     }

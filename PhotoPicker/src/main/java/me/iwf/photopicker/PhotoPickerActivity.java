@@ -2,9 +2,13 @@ package me.iwf.photopicker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +46,14 @@ public class PhotoPickerActivity extends AppCompatActivity {
   private ArrayList<String> originalPhotos = null;
 
   private Titlebar titlebar;
-
-
+  boolean showCamera;
+  boolean previewEnabled;
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    boolean showCamera      = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
-    boolean showGif         = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
-    boolean previewEnabled  = getIntent().getBooleanExtra(EXTRA_PREVIEW_ENABLED, true);
+     showCamera      = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
+     showGif         = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
+     previewEnabled  = getIntent().getBooleanExtra(EXTRA_PREVIEW_ENABLED, true);
 
     setShowGif(showGif);
 
@@ -57,6 +61,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     titlebar = (Titlebar) findViewById(R.id.titlebar);
     titlebar.init(this);
+
+    fragmentManager = getSupportFragmentManager();
 
    /* Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(mToolbar);
@@ -85,7 +91,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
     columnNumber = getIntent().getIntExtra(EXTRA_GRID_COLUMN, DEFAULT_COLUMN_NUMBER);
     originalPhotos = getIntent().getStringArrayListExtra(EXTRA_ORIGINAL_PHOTOS);
 
-    pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
+    showPikcerFragment();
+    /*pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
     if (pickerFragment == null) {
       pickerFragment = PhotoPickerFragment
           .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos);
@@ -94,7 +101,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
           .replace(R.id.container, pickerFragment, "tag")
           .commit();
       getSupportFragmentManager().executePendingTransactions();
-    }
+    }*/
 
     //右边的点击事件
     titlebar.getTvRight().setOnClickListener(new View.OnClickListener() {
@@ -112,6 +119,11 @@ public class PhotoPickerActivity extends AppCompatActivity {
       }
     });
 
+    setListener();
+
+  }
+
+  private void setListener() {
     pickerFragment.getPhotoGridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
       @Override public boolean OnItemCheck(int position, Photo photo, final boolean isCheck, int selectedItemCount) {
 
@@ -138,7 +150,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
         return true;
       }
     });
-
   }
 
 
@@ -148,13 +159,14 @@ public class PhotoPickerActivity extends AppCompatActivity {
    */
   @Override public void onBackPressed() {
     if (imagePagerFragment != null && imagePagerFragment.isVisible()) {
-      imagePagerFragment.runExitAnimation(new Runnable() {
+      showPikcerFragment();
+      /*imagePagerFragment.runExitAnimation(new Runnable() {
         public void run() {
           if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
           }
         }
-      });
+      });*/
     } else {
       super.onBackPressed();
     }
@@ -170,43 +182,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         .commit();
   }
 
- /* @Override public boolean onCreateOptionsMenu(Menu menu) {
-    if (!menuIsInflated) {
-      getMenuInflater().inflate(R.menu.__picker_menu_picker, menu);
-      menuDoneItem = menu.findItem(R.id.done);
-      if (originalPhotos != null && originalPhotos.size() > 0) {
-        menuDoneItem.setEnabled(true);
-        menuDoneItem.setTitle(
-                getString(R.string.__picker_done_with_count, originalPhotos.size(), maxCount));
-      } else {
-        menuDoneItem.setEnabled(false);
-      }
 
-      menuIsInflated = true;
-      return true;
-    }
-    return false;
-  }*/
-
-
- /* @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == android.R.id.home) {
-      super.onBackPressed();
-      return true;
-    }
-
-    if (item.getItemId() == R.id.done) {
-      Intent intent = new Intent();
-      ArrayList<String> selectedPhotos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
-      intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotos);
-      setResult(RESULT_OK, intent);
-      finish();
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
-  }*/
 
   public PhotoPickerActivity getActivity() {
     return this;
@@ -218,5 +194,78 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
   public void setShowGif(boolean showGif) {
     this.showGif = showGif;
+  }
+
+
+  FragmentManager fragmentManager;
+  FragmentTransaction fragmentTransaction;
+
+  private void showPikcerFragment() {
+    fragmentTransaction = fragmentManager.beginTransaction();
+
+        //如果tabFragment1为空，说明还没创建Tab1
+        if(pickerFragment==null){
+          pickerFragment = PhotoPickerFragment
+                  .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos);
+
+        }
+        //如果isAdded == true 表示 tab1 已加入布局中
+        if(!pickerFragment.isAdded()){
+          fragmentTransaction.add(R.id.container,pickerFragment);
+        }
+        else{
+          //如果tab2不为空，把tab2隐藏就是、
+          if(imagePagerFragment!=null){
+            fragmentTransaction.hide(imagePagerFragment);
+          }
+          //Log.v("rush_yu", "hh");
+          //显示tab1
+          fragmentTransaction.show(pickerFragment);
+        }
+
+    fragmentTransaction.commit();
+    fragmentManager.executePendingTransactions();
+  }
+
+
+
+  /**
+   *
+   * @param index 0代表picker,1代表viewer
+   */
+  public void showPagerFragment(List<String> photos, int index, int[] screenLocation,int height,
+                          int width){
+    fragmentTransaction = fragmentManager.beginTransaction();
+
+
+        //如果tabFragment2为空，说明还没创建Tab2
+        if(imagePagerFragment==null){
+          imagePagerFragment = ImagePagerFragment.newInstance(photos, index, screenLocation, height,
+                  width);
+        }
+        //如果isAdded == true 表示 tab2 已加入布局中
+        if(!imagePagerFragment.isAdded()){
+          fragmentTransaction.add(R.id.container,imagePagerFragment);
+        }
+        else{
+          //如果tab2不为空，把tab1隐藏就是、
+          if(pickerFragment!=null){
+            fragmentTransaction.hide(pickerFragment);
+          }
+          //显示tab2
+          //todo 更新数据
+          imagePagerFragment.update(photos, index, screenLocation, height, width);
+          fragmentTransaction.show(imagePagerFragment);
+          //Log.v("rush_yu", "hh1");
+        }
+
+    fragmentTransaction.commit();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    //ImageLoader.getActualLoader().clearAllMemoryCaches();
+    Glide.get(this).clearMemory();
   }
 }
