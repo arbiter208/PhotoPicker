@@ -5,7 +5,9 @@ import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.hss01248.image.ImageLoader;
+import com.squareup.leakcanary.LeakCanary;
+
+import me.iwf.photopicker.PhotoPickUtils;
 
 /**
  * Created by Administrator on 2017/3/25.
@@ -17,7 +19,9 @@ public class BaseApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ImageLoader.init(this,60,false);
+        //ImageLoader.init(this,60,new GlideLoader());
+        PhotoPickUtils.init(this);
+        LeakCanary.install(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -48,7 +52,7 @@ public class BaseApp extends Application {
                     count--;
                     if(count==0){
                         //进入后台了
-                        ImageLoader.getActualLoader().clearAllMemoryCaches();
+                        //ImageLoader.getActualLoader().clearAllMemoryCaches();
 
                     }
                 }

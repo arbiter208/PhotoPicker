@@ -1,1 +1,1 @@
-include ':PhotoPicker', ':photopickerdemo', ':image'
+include ':PhotoPicker-glide', ':photopickerdemo',':PhotoPicker-fresco'
