@@ -88,8 +88,8 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        com.github.hss01248.PhotoPicker:PhotoPicker-glide:1.0.4//glide版
-		com.github.hss01248.PhotoPicker:PhotoPicker-fresco:1.0.4//fresco版
+	        com.github.hss01248.PhotoPicker:PhotoPicker-glide:1.0.5//glide版
+		com.github.hss01248.PhotoPicker:PhotoPicker-fresco:1.0.5//fresco版
 	}
 
 
