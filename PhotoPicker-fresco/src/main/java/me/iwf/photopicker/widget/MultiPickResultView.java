@@ -123,24 +123,24 @@ public class MultiPickResultView extends FrameLayout {
         if (action == ACTION_SELECT){
             PhotoPickUtils.onActivityResult(requestCode, resultCode, data, new PhotoPickUtils.PickHandler() {
                 @Override
-                public void onPickSuccess(ArrayList<String> photos) {
+                public void onPickSuccess(ArrayList<String> photos,int requestCode) {
                     photoAdapter.refresh(photos);
                 }
 
                 @Override
-                public void onPreviewBack(ArrayList<String> photos) {
+                public void onPreviewBack(ArrayList<String> photos,int requestCode) {
                     photoAdapter.refresh(photos);
                 }
 
                 @Override
-                public void onPickFail(String error) {
+                public void onPickFail(String error,int requestCode) {
                     Toast.makeText(getContext(),error,Toast.LENGTH_LONG).show();
                     selectedPhotos.clear();
                     photoAdapter.notifyDataSetChanged();
                 }
 
                 @Override
-                public void onPickCancle() {
+                public void onPickCancle(int requestCode) {
                     //Toast.makeText(getContext(),"取消选择",Toast.LENGTH_LONG).show();
                 }
             });

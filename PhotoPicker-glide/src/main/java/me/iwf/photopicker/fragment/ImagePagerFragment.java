@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
@@ -91,7 +92,7 @@ public class ImagePagerFragment extends Fragment {
     this.paths.addAll(paths);
     this.currentItem = currentItem;
 
-    mViewPager.setCurrentItem(currentItem);
+    mViewPager.setCurrentItem(currentItem,false);
     mViewPager.getAdapter().notifyDataSetChanged();
   }
 
@@ -133,34 +134,17 @@ public class ImagePagerFragment extends Fragment {
     View rootView = inflater.inflate(R.layout.__picker_picker_fragment_image_pager, container, false);
 
     mViewPager = (ViewPager) rootView.findViewById(R.id.vp_photos);
+
     //mViewPager.setAdapter(mPagerAdapter);
     ImageLoader.loadBigImages(mViewPager,paths);
-    mViewPager.setCurrentItem(currentItem);
+    mViewPager.setCurrentItem(currentItem,false);
     //mViewPager.setOffscreenPageLimit(1);
 
     // Only run the animation if we're coming from the parent activity, not if
     // we're recreated automatically by the window manager (e.g., device rotation)
-    /*if (savedInstanceState == null && hasAnim) {
-      ViewTreeObserver observer = mViewPager.getViewTreeObserver();
-      observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-        @Override
-        public boolean onPreDraw() {
+      if(savedInstanceState ==null)
+      beforeEnterAnimation();
 
-          mViewPager.getViewTreeObserver().removeOnPreDrawListener(this);
-
-          // Figure out where the thumbnail and full size versions are, relative
-          // to the screen and each other
-          int[] screenLocation = new int[2];
-          mViewPager.getLocationOnScreen(screenLocation);
-          thumbnailLeft = thumbnailLeft - screenLocation[0];
-          thumbnailTop  = thumbnailTop - screenLocation[1];
-
-          runEnterAnimation();
-
-          return true;
-        }
-      });
-    }*/
 
 
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -182,8 +166,32 @@ public class ImagePagerFragment extends Fragment {
     return rootView;
   }
 
+    private void beforeEnterAnimation() {
+        if ( hasAnim) {
+            ViewTreeObserver observer = mViewPager.getViewTreeObserver();
+            observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
 
-  /**
+                    mViewPager.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                    // Figure out where the thumbnail and full size versions are, relative
+                    // to the screen and each other
+                    /*int[] screenLocation = new int[2];
+                    mViewPager.getLocationOnScreen(screenLocation);
+                    thumbnailLeft = thumbnailLeft - screenLocation[0];
+                    thumbnailTop  = thumbnailTop - screenLocation[1];*/
+
+                    runEnterAnimation();
+
+                    return true;
+                }
+            });
+        }
+    }
+
+
+    /**
    * The enter animation scales the picture in from its previous thumbnail
    * size/location, colorizing it in parallel. In parallel, the background of the
    * activity is fading in. When the pictue is in place, the text description
@@ -332,6 +340,21 @@ public class ImagePagerFragment extends Fragment {
   }
 
   public void update(List<String> photos, int index, int[] screenLocation, int height, int width) {
+      paths.clear();
+      paths.addAll(photos);
+
+      mViewPager.getAdapter().notifyDataSetChanged();
+    mViewPager.setCurrentItem(index,false);
+
+      hasAnim         = true;
+      currentItem     = index;
+
+      thumbnailTop    = screenLocation[0];
+      thumbnailLeft   = screenLocation[1];
+      thumbnailWidth  = width;
+      thumbnailHeight = height;
+
+      runEnterAnimation();
 
   }
 }

@@ -105,7 +105,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
             if (photoPaths != null && photoPaths.size() ==9){
               Toast.makeText(mContext,"已选了9张图片",Toast.LENGTH_SHORT).show();
             }else {
-              PhotoPickUtils.startPick((Activity) mContext,false,9,photoPaths);
+              PhotoPickUtils.startPick().setSelected(photoPaths).start((Activity) mContext,77);
             }
           }
         });

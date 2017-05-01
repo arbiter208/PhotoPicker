@@ -38,9 +38,11 @@ public class PhotoPagerActivity extends AppCompatActivity {
   //private ActionBar actionBar;
   private boolean showDelete;
   private Titlebar titlebar;
+  Intent intent;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    intent = getIntent();
 
     setContentView(R.layout.__picker_activity_photo_pager);
 
@@ -130,7 +132,6 @@ public class PhotoPagerActivity extends AppCompatActivity {
 
   @Override public void onBackPressed() {
 
-    Intent intent = new Intent();
     intent.putExtra(KEY_SELECTED_PHOTOS, pagerFragment.getPaths());
     setResult(RESULT_OK, intent);
     finish();

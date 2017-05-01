@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
   ArrayList<String> selectedPhotos = new ArrayList<>();*/
 
-  //public final static int REQUEST_CODE = 1;
+  public final static int REQUEST_CODE = 90;
 
   ArrayList<String> pathslook ;
 
@@ -119,11 +119,14 @@ public class MainActivity extends AppCompatActivity {
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
 
-    recyclerView.onActivityResult(requestCode,resultCode,data);
+    if(requestCode ==REQUEST_CODE){
+      recyclerView.onActivityResult(requestCode,resultCode,data);
+      recyclerViewShowOnly.showPics(recyclerView.getPhotos());
+    }
 
 
 
-    recyclerViewShowOnly.showPics(recyclerView.getPhotos());
+
 
    /* PhotoPickUtils.onActivityResult(requestCode, resultCode, data, new PhotoPickUtils.PickHandler() {
       @Override
@@ -256,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
             .setPhotoCount(9)
             .setGridColumnCount(4)
             .start(this);*/
-        PhotoPickUtils.startPick(this,false,1,null);
+        PhotoPickUtils.startPick().setPreviewEnabled(true).start(this,REQUEST_CODE);
         break;
       }
 

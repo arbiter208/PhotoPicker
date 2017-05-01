@@ -48,10 +48,13 @@ public class PhotoPickerActivity extends AppCompatActivity {
   private Titlebar titlebar;
   boolean showCamera;
   boolean previewEnabled;
+  Intent intent;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    intent = getIntent();
 
-     showCamera      = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
+     showCamera      = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, false);
      showGif         = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
      previewEnabled  = getIntent().getBooleanExtra(EXTRA_PREVIEW_ENABLED, true);
 
@@ -64,44 +67,12 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     fragmentManager = getSupportFragmentManager();
 
-   /* Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(mToolbar);
-    setTitle("");//去掉原生的标题
-
-    //将原生的返回图标换掉
-    mToolbar.setNavigationIcon(R.drawable.__picker_delete);
-    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        PhotoPickerActivity.this.finish();
-      }
-    });
-
-
-
-    ActionBar actionBar = getSupportActionBar();
-
-    assert actionBar != null;
-    actionBar.setDisplayHomeAsUpEnabled(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      actionBar.setElevation(25);
-    }*/
 
     maxCount = getIntent().getIntExtra(EXTRA_MAX_COUNT, DEFAULT_MAX_COUNT);
     columnNumber = getIntent().getIntExtra(EXTRA_GRID_COLUMN, DEFAULT_COLUMN_NUMBER);
     originalPhotos = getIntent().getStringArrayListExtra(EXTRA_ORIGINAL_PHOTOS);
 
     showPikcerFragment();
-    /*pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
-    if (pickerFragment == null) {
-      pickerFragment = PhotoPickerFragment
-          .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos);
-      getSupportFragmentManager()
-          .beginTransaction()
-          .replace(R.id.container, pickerFragment, "tag")
-          .commit();
-      getSupportFragmentManager().executePendingTransactions();
-    }*/
 
     //右边的点击事件
     titlebar.getTvRight().setOnClickListener(new View.OnClickListener() {
@@ -109,7 +80,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
       public void onClick(View v) {
         ArrayList<String> photos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
         if (photos != null && photos.size() > 0){
-          Intent intent = new Intent();
+
           intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, photos);
           setResult(RESULT_OK, intent);
           finish();
@@ -159,14 +130,14 @@ public class PhotoPickerActivity extends AppCompatActivity {
    */
   @Override public void onBackPressed() {
     if (imagePagerFragment != null && imagePagerFragment.isVisible()) {
-      showPikcerFragment();
-      /*imagePagerFragment.runExitAnimation(new Runnable() {
+      imagePagerFragment.runExitAnimation(new Runnable() {
         public void run() {
           if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
           }
         }
-      });*/
+      });
+      showPikcerFragment();
     } else {
       super.onBackPressed();
     }
@@ -212,15 +183,18 @@ public class PhotoPickerActivity extends AppCompatActivity {
         //如果isAdded == true 表示 tab1 已加入布局中
         if(!pickerFragment.isAdded()){
           fragmentTransaction.add(R.id.container,pickerFragment);
+          //fragmentTransaction.addToBackStack(null);
         }
         else{
           //如果tab2不为空，把tab2隐藏就是、
           if(imagePagerFragment!=null){
             fragmentTransaction.hide(imagePagerFragment);
+
           }
           //Log.v("rush_yu", "hh");
           //显示tab1
           fragmentTransaction.show(pickerFragment);
+          //fragmentTransaction.addToBackStack(null);
         }
 
     fragmentTransaction.commit();
@@ -246,6 +220,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         //如果isAdded == true 表示 tab2 已加入布局中
         if(!imagePagerFragment.isAdded()){
           fragmentTransaction.add(R.id.container,imagePagerFragment);
+
         }
         else{
           //如果tab2不为空，把tab1隐藏就是、

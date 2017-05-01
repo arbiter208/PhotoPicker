@@ -14,63 +14,63 @@ import java.util.ArrayList;
  */
 public class PhotoPickUtils {
 
+    public static int layoutResOfGrid;
+    public static int layoutResOfDir ;
+
     public static void onActivityResult(int requestCode, int resultCode, Intent data,PickHandler pickHandler ) {
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == PhotoPicker.REQUEST_CODE) {//第一次，选择图片后返回
-                if (data != null) {
-                    ArrayList<String> photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                    pickHandler.onPickSuccess(photos);
-                   /* if (photos != null){
-                        if (photos.size() >0){
-
-                        }else {
-                            pickHandler.onPickFail("未选择图片1");
-                        }
-                    }else {
-                        pickHandler.onPickFail("未选择图片2");
-                    }*/
+        if(resultCode == Activity.RESULT_CANCELED) {
+            pickHandler.onPickCancle( requestCode);
+            return;
+        }
+        if (requestCode == PhotoPreview.REQUEST_CODE) {//如果是预览与删除后返回
+            if (data != null) {
+                ArrayList<String> photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                if (photos != null) {
+                    pickHandler.onPreviewBack(photos, requestCode);
                 } else {
-                    pickHandler.onPickFail("选择图片失败");
+                    pickHandler.onPickFail("选择图片失败", requestCode);
                 }
-            }else if (requestCode == PhotoPreview.REQUEST_CODE){//如果是预览与删除后返回
-                if (data != null) {
-                    ArrayList<String> photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                    pickHandler.onPreviewBack(photos);
-                } else {
-                   // pickHandler.onPickFail("选择图片失败");
-                }
-
+            } else {
+                pickHandler.onPickFail("选择图片失败",requestCode);
             }
-        }else {
+            return;
 
-            if (requestCode == PhotoPicker.REQUEST_CODE){
-                pickHandler.onPickCancle();
+        }
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                pickHandler.onPickFail("选择图片失败", requestCode);
+                return;
+            }
+            ArrayList<String> photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+            if (photos != null) {
+                pickHandler.onPickSuccess(photos, requestCode);
+            } else {
+                pickHandler.onPickFail("选择图片失败", requestCode);
             }
         }
 
-
     }
 
-    public static void startPick(Activity context,boolean showGif,int photoCount,ArrayList<String> photos){
-        PhotoPicker.builder()
-                .setPhotoCount(photoCount)
-                .setShowCamera(false)
-                .setShowGif(showGif)
-                .setSelected(photos)
-                .setPreviewEnabled(true)
-                .start(context, PhotoPicker.REQUEST_CODE);
+    public static PhotoPicker.PhotoPickerBuilder startPick(){
+      return   PhotoPicker.builder();
     }
 
 
 
     public interface  PickHandler{
-        void onPickSuccess(ArrayList<String> photos);
-        void onPreviewBack(ArrayList<String> photos);
-        void onPickFail(String error);
-        void onPickCancle();
+        void onPickSuccess(ArrayList<String> photos,int requestCode);
+        void onPreviewBack(ArrayList<String> photos,int requestCode);
+        void onPickFail(String error,int requestCode);
+        void onPickCancle(int requestCode);
     }
 
+    /**
+     *
+     * @param appContext
+
+     */
     public static void init(Context appContext){
         ImageLoader.init(appContext,60,new FrescoLoader());
     }
