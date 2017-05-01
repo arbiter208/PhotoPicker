@@ -2,8 +2,15 @@
 # 微信ui版的PhotoPicker
 
 [![](https://jitpack.io/v/glassLake/PhotoPicker.svg)](https://jitpack.io/#glassLake/PhotoPicker)
-## 注: 图片选择/拍照->裁剪->压缩 整个流程的操作已经串起到下面的库中
-[PhotoOut](https://github.com/hss01248/PhotoOut)
+
+
+
+> 一条龙地支持fresco和glide
+
+图片加载:[ImageLoader](https://github.com/hss01248/ImageLoader)  -->> 图片选择: [PhotoPicker](https://github.com/hss01248/PhotoPicker)  -->>拍照/选图/裁剪/压缩: [PhotoOut](https://github.com/hss01248/PhotoOut)
+
+
+
 
 
 本项目fork 自[photoPicker](https://github.com/donglua/PhotoPicker)
