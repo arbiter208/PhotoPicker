@@ -53,6 +53,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     intent = getIntent();
+    ImageLoader.getActualLoader().clearMomoryCache();
 
      showCamera      = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, false);
      showGif         = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
@@ -240,7 +241,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    ImageLoader.getActualLoader().clearAllMemoryCaches();
+    ImageLoader.getActualLoader().clearMomoryCache();
 
   }
 }

@@ -77,7 +77,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
   @Override public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View itemView = inflater.inflate(R.layout.__picker_item_photo, parent, false);
-    PhotoViewHolder holder = new PhotoViewHolder(itemView);
+    PhotoViewHolder holder = new PhotoViewHolder(itemView);//Util2.getNewPhotoViewHolder(inflater,parent);
     if (viewType == ITEM_TYPE_CAMERA) {
       holder.vSelected.setVisibility(View.GONE);
       holder.ivPhoto.setScaleType(ImageView.ScaleType.CENTER);
@@ -173,6 +173,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
       vSelected = itemView.findViewById(R.id.v_selected);
       cover = itemView.findViewById(R.id.cover);
     }
+
   }
 
 
@@ -215,7 +216,9 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   }
 
   @Override public void onViewRecycled(PhotoViewHolder holder) {
-    ImageLoader.getActualLoader().clearMomoryCache(holder.ivPhoto);
     super.onViewRecycled(holder);
+    ImageLoader.getActualLoader().clearMomoryCache(holder.ivPhoto);
   }
+
+
 }
