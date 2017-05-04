@@ -75,7 +75,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
   @Override public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
    // View itemView = inflater.inflate(R.layout.__picker_item_photo, parent, false);
     PhotoViewHolder viewHolder = PhotoPickUtils.holderGenerator.newGridViewHolder2(mContext);
-    parent.addView(viewHolder.itemView);
+    //parent.addView(viewHolder.itemView);
     return viewHolder;
   }
 

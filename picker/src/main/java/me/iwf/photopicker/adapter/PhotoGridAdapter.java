@@ -81,7 +81,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   @Override public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     //View itemView = inflater.inflate(R.layout.__picker_item_photo, parent, false);
     PhotoViewHolder holder = PhotoPickUtils.holderGenerator.newGridViewHolder(mContext);//new PhotoViewHolder(itemView);
-    parent.addView(holder.itemView);
+    //parent.addView(holder.itemView);
 
     if (viewType == ITEM_TYPE_CAMERA) {
       holder.vSelected.setVisibility(View.GONE);

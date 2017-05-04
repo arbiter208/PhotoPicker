@@ -92,20 +92,19 @@ Add it in your root build.gradle at the end of repositories:
 			maven { url "https://jitpack.io" }
 		}
 	}
-Step 2. Add the dependency
+Step 2. Add the dependency(三选一)
 
 	dependencies {
-	        com.github.hss01248.PhotoPicker:glide:1.0.6//glide版
-			com.github.hss01248.PhotoPicker:fresco:1.0.6//fresco版
-			com.github.hss01248.PhotoPicker:picasso:1.0.6//picasso版
+	        compile'com.github.hss01248.PhotoPicker:glide:1.0.6'
+	    	compile'com.github.hss01248.PhotoPicker:fresco:1.0.6'
+	    	compile'com.github.hss01248.PhotoPicker:picasso:1.0.6'
 	}
 
 
 ## 初始化:
 
 ```
- PhotoPickUtils.init(getApplicationContext(),new FrescoIniter());
-
+ PhotoPickUtils.init(getApplicationContext(),new FrescoIniter());//第二个参数根据具体依赖库而定
 ```
 
 ## 使用完全封装好的组件
