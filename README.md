@@ -5,7 +5,7 @@
 
 
 
-> 一条龙地支持fresco和glide
+> 一条龙地支持fresco和glide,picasso
 
 图片加载:[ImageLoader](https://github.com/hss01248/ImageLoader)  -->> 图片选择: [PhotoPicker](https://github.com/hss01248/PhotoPicker)  -->>拍照/选图/裁剪/压缩: [PhotoOut](https://github.com/hss01248/PhotoOut)
 
@@ -95,8 +95,9 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        com.github.hss01248.PhotoPicker:PhotoPicker-glide:1.0.5//glide版
-		com.github.hss01248.PhotoPicker:PhotoPicker-fresco:1.0.5//fresco版
+	        com.github.hss01248.PhotoPicker:glide:1.0.6//glide版
+			com.github.hss01248.PhotoPicker:fresco:1.0.6//fresco版
+			com.github.hss01248.PhotoPicker:picasso:1.0.6//picasso版
 	}
 
 
