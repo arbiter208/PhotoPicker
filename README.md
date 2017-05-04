@@ -101,6 +101,12 @@ Step 2. Add the dependency
 	}
 
 
+## 初始化:
+
+```
+ PhotoPickUtils.init(getApplicationContext(),new FrescoIniter());
+
+```
 
 ## 使用完全封装好的组件
 
