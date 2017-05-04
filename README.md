@@ -150,7 +150,7 @@ recyclerViewShowOnly.init(this,MultiPickResultView.ACTION_ONLY_SHOW,pathslook);
 ### Pick Photo
 
 ```java
-PhotoPickUtils.startPick(Activity context,boolean showGif,int photoCount,ArrayList<String> photos)
+PhotoPickUtils.startPick()....start(this);
 ```
 
 ### 
