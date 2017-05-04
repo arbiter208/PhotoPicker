@@ -31,9 +31,10 @@ dependencies {
   //compile 'jp.wasabeef:glide-transformations:2.0.1'
   //compile 'com.github.hss01248.ImageLoader:image:1.0.3'
   //compile 'com.github.hss01248.ImageLoader:frescoloader:1.0.3'
-  compile ('com.github.hss01248.ImageLoader:fresco:1.0.5'){
+  compile ('com.github.hss01248.ImageLoader:image:1.0.6'){
     exclude group: 'com.android.support'
   }
+
   //compile project(':image')
 }
 
