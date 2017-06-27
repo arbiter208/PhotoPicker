@@ -52,11 +52,11 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
       /*LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
       convertView = mLayoutInflater.inflate(R.layout.__picker_item_directory, parent, false);*/
       holder = PhotoPickUtils.holderGenerator.newDirViewHolder(GlobalConfig.context);
+      convertView= holder.rootView;
       convertView.setTag(holder);
     } else {
       holder = (ViewHolder) convertView.getTag();
     }
-
     holder.bindData(directories.get(position));
 
     return convertView;

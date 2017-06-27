@@ -95,9 +95,9 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency(三选一)
 
 	dependencies {
-	        compile'com.github.hss01248.PhotoPicker:glide:1.0.7'
-	    	compile'com.github.hss01248.PhotoPicker:fresco:1.0.7'
-	    	compile'com.github.hss01248.PhotoPicker:picasso:1.0.7'
+	        compile'com.github.hss01248.PhotoPicker:glide:1.0.8'
+	    	compile'com.github.hss01248.PhotoPicker:fresco:1.0.8'
+	    	compile'com.github.hss01248.PhotoPicker:picasso:1.0.8'
 	}
 
 
